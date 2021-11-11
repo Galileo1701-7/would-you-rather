@@ -1,6 +1,8 @@
 import {
     _getUsers,
     _getQuestions,
+    _saveQuestion
+    
   } from './_DATA.js'
   
   export function getInitialData () {
@@ -11,6 +13,11 @@ import {
       users,
       questions,
     }))
+  }
+  
+  export function saveQuestion(newQuestion){
+    //console.log('nq:', newQuestion)
+    return _saveQuestion(newQuestion)
   }
   
 //   export function saveLikeToggle (info) {
