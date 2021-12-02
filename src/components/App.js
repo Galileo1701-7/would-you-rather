@@ -1,7 +1,6 @@
-//import logo from '../../src/logo.svg';
 import './App.css';
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { handleInitialData } from '../actions/shared'
 import Home from './Home'
@@ -9,55 +8,52 @@ import Leaderboard from './Leaderboard'
 import Login from './Login'
 import NewQuestion from './NewQuestion';
 import NavBar from './NavBar'
+import QuestionDetails from './QuestionDetails'
+import questionUnanswered from './QuestionUnanswered'
+import NoMatchPage from './NoMatchPage'
+import Questions from './Questions'
+
 
 
 
 class App extends Component {
+  
+
   componentDidMount() {
     this.props.dispatch(handleInitialData())
   }
   render() {
+   
+
     return (
       <Router>
       <>
       
       <div className="container">
-        {/* menu bar */}<NavBar/>
+               
         {this.props.loading ===true 
         ? null 
-        :  <div>
+        : <div><div> <NavBar/> </div>
+        <div>
+         
+        <Switch>
         <Route exact path='/'  component={Home} />
-        <Route path='/login' component= {() => <Login/>} />
+        <Route path='/home'  component={Home} />
+        <Route path='/login' component= {Login} />
         <Route path='/leaderboard' component={Leaderboard} /> 
-        {/* <Route path='/question/:id'component={TweetPage} /> */}
         <Route path='/new' component={NewQuestion} />
+        <Route path='/add' component={NewQuestion} />
+        <Route exact path='/questions/:id' component={Questions} />
+        <Route path='/questionunanswered/:id' component={questionUnanswered} /> 
+        <Route path='/questiondetails/:id' component={QuestionDetails} /> 
+         
+        <Route component={NoMatchPage}/> 
+        </Switch>      
+      </div>
       </div>}  
         
         
-{/*         
-        <div>
-          <Login />      
-      </div> */}
 
-     
-
-      {/* <div>
-        {this.props.loading ===true 
-        ? null 
-        : <NewQuestion />}        
-      </div> */}
-
-       {/* <div>
-        {this.props.loading ===true 
-        ? null 
-        : <Home />}        
-      </div> */}
-
-      {/* <div>
-        {this.props.loading ===true 
-        ? null 
-        : <Leaderboard />}        
-      </div> */}
       </div>
 
       </>
@@ -66,51 +62,12 @@ class App extends Component {
   }
 }
 
-function mapStateToProps({ authedUser }) {
+function mapStateToProps({ authedUser}) {
+   
   return {
       loading: authedUser === null
+      
   }
 }
 
 export default connect(mapStateToProps)(App)
-//connect to get access to dispatch
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function App() {
-
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         {/* <img src={logo} className="App-logo" alt="logo" /> */}
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;

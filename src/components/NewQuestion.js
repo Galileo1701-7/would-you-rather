@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { handleAddQuestion } from '../actions/questions';
 import { Redirect } from 'react-router-dom'
+import  Button from 'react-bootstrap/Button'
+
 
 class NewQuestion extends Component {
     state = {
@@ -27,7 +29,7 @@ class NewQuestion extends Component {
         
         const { optionOne, optionTwo } = this.state
         //const { dispatch }= this.props
-        console.log('optionOne=', this.state.optionOne,' ------ optionTwo=', this.state.optionTwo);
+        //console.log('optionOne=', this.state.optionOne,' ------ optionTwo=', this.state.optionTwo);
         this.setState(() => ({
             toHome: optionTwo ? true : false,
             optionOne : '',
@@ -41,6 +43,9 @@ class NewQuestion extends Component {
 
 // todo redirect to home page when question is submitted
     render () {
+        if (this.props.authedUser===''){
+            return <Redirect to='/login' /> 
+        }
        
         const { optionOne } =this.state
         const { optionTwo } =this.state
@@ -48,7 +53,8 @@ class NewQuestion extends Component {
         if (this.state.toHome === true) {
             return <Redirect to='/'/>
         }
-        console.log('home?', this.state.toHome)
+        //console.log('home?', this.state.toHome)
+        //console.log('authedUser =', this.props.authedUser)
 
         return(
             <div><h3>New Question</h3>
@@ -72,18 +78,23 @@ class NewQuestion extends Component {
                     className='textarea'
                     maxLength={200}
 
-                />
-                <button className='btn'
+                /><br></br>
+                <Button className='btn'
                 type='submit'
-                disabled={optionOne === '' || optionTwo === ''}>
+                disabled={optionOne === '' || optionTwo === '' || this.props.authedUser===''}>
                     Submit Question
 
-                </button>
+                </Button>
 
             </form>
             </div>
         )
     }
 }
+function mapStateToProps({authedUser}){
+    return{
+        authedUser
+    };
+}
 
-export default connect()(NewQuestion)
+export default connect(mapStateToProps)(NewQuestion)

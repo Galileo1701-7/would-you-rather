@@ -1,7 +1,8 @@
 import {
     _getUsers,
     _getQuestions,
-    _saveQuestion
+    _saveQuestion,
+    _saveQuestionAnswer
     
   } from './_DATA.js'
   
@@ -16,14 +17,10 @@ import {
   }
   
   export function saveQuestion(newQuestion){
-    //console.log('nq:', newQuestion)
     return _saveQuestion(newQuestion)
   }
+
+  export function saveQuestionAnswer(answer){
+    return _saveQuestionAnswer(answer)
+  }
   
-//   export function saveLikeToggle (info) {
-//     return _saveLikeToggle(info)
-//   }
-  
-//   export function saveTweet (info) {
-//     return _saveTweet(info)
-//   }

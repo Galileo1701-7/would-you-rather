@@ -11,8 +11,9 @@ class Login extends Component {
 
     handleChange = (e) => {
         e.preventDefault()
-        const selectValue = e.target.value        
+        const selectValue = e.target.value     
         //console.log('select =',selectValue)
+        
         this.setState(() => ({
             selectValue            
         }))
@@ -21,8 +22,9 @@ class Login extends Component {
     handleSubmit = (e) => {
         e.preventDefault()
         const { dispatch } = this.props
-        console.log(this.state.selectValue)
-        dispatch(setAuthedUser(this.state.selectValue));
+        //console.log(this.state.selectValue)
+        const finalSelectValue = (this.state.selectValue !=='logout') ? this.state.selectValue : ''
+        dispatch(setAuthedUser(finalSelectValue));
         
         this.setState(() => ({
             selectValue: '',
@@ -31,30 +33,43 @@ class Login extends Component {
 }
 
     render(){
+        //console.log('match=', this.props.match)
         const { selectValue } = this.state
         const { toHome } = this.state
-        const loggedInUser = this.props.authedUser
+        //console.log('url =', this.props.location.search)
+        const queryString = require('query-string');
+        const parsed = queryString.parse(this.props.location.search);
+        //console.log('url parsed =', parsed)
+        //console.log('login props = ', this.props)
+        //const loggedInUser = this.props.authedUser
+        //console.log('redirect parsed =' ,parsed.redirect)
 
         if (toHome === true) {
-            return <Redirect to='/' />
+            //return <Redirect to='/' />
+            if(parsed.redirect){
+                return <Redirect to={parsed.redirect} />
+            }else{
+                return <Redirect to='/home' />
+            }
           }
-       
-        //console.log('login props = ', this.props)
+        
         return( 
             <div>
-                <h2>the logged in user is {loggedInUser}!</h2>
-            Please login using the drop down below....
+                <h2>The logged in user is {this.props.userName}!</h2>
+            Please login or logout using the drop down below....
             <form onSubmit={this.handleSubmit}>
-                <label >Current User List - </label>
+                <label >Pick a user or logout - </label>
                     <select id="userListSelect" onChange={this.handleChange} value={selectValue}>
                     <option key='1' value='' placeholder='pick one'>Pick one...</option>
-                        {this.props.userList.map((x) => (                        
-                        <option key={x.value} value={x.value}>{x.userName}</option> 
+                        <option key='logout' value="logout">LOGOUT</option>  
+                        {this.props.userList.map((x) => (                                               
+                            <option key={x.value} value={x.value}>{x.userName}</option> 
                         ))
                         }
                         
                     </select>
-                <button id="btn" disabled={selectValue===''}>Sign In Please</button>
+                {/* <button id="btn" disabled={selectValue===''}>Sign In Please</button> */}
+                <button id="btn" >Execute</button>
             </form>
 
             </div>
@@ -62,7 +77,9 @@ class Login extends Component {
     }
 }
     function mapStateToProps({ users, authedUser }) {
+        const userName = (authedUser==='') ? 'Nobody' : users[authedUser].name
         return{
+            userName,
             authedUser,
             userList: Object.keys(users).map((id) =>({
                 value: id,

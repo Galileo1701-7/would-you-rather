@@ -1,25 +1,31 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux'
+//import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Question extends Component {
     render() {
-        console.log('question.js =', this.props)
-        
+        //console.log('question.js =', this.props)
+        const id = this.props.id;
         return(
+            
             <>
-            <hr></hr>
-            <div className='question'>
-                question by {this.props.by}
+            <Link to={`/questions/${id}`}>
+                <hr></hr>
+                <div className='question'>
+                    question by {this.props.by}
+                </div>
+                <img 
+                height="100" width="100"
+                src={this.props.avatar}
+                alt={`Avatar of ${this.props.by}`}
+                className='avatar'
+                />
+            <div>
+            Would you rather.... <br></br>
+                {this.props.optionOne}--OR--{this.props.optionTwo} ?
             </div>
-            <img 
-            height="100" width="100"
-            src={this.props.avatar}
-            alt={`Avatar of ${this.props.by}`}
-            className='avatar'
-            />
-           <div>
-               {this.props.optionOne}-OR-{this.props.optionTwo}
-           </div>
+           </Link>
             </>
         )
     }
